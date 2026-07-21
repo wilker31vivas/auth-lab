@@ -1,0 +1,24 @@
+{
+  "name": "tutorial-auth-claude",
+  "version": "1.0.0",
+  "description": "Tutorial de auth con claude IA",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.22.6",
+    "nodemon": "^3.1.14",
+    "validator": "^13.15.35"
+  }
+}

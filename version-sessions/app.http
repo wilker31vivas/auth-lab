@@ -1,0 +1,26 @@
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Usuario de Prueba",
+  "email": "test@ejemplo.com",
+  "password": "MiPassword123!",
+}
+
+###
+GET http://localhost:3000/api/welcome
+
+###
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@ejemplo.com",
+  "password": "MiPassword123!"
+}
+
+###
+GET http://localhost:3000/api/auth/profile
+
+###
+POST http://localhost:3000/api/auth/logout
