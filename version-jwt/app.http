@@ -1,0 +1,41 @@
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@ejemplo.com",
+  "password": "MiPassword123!",
+  "name": "Usuario de Prueba"
+}
+
+###
+GET http://localhost:3000/api/welcome
+
+###
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@ejemplo.com",
+  "password": "MiPassword123!"
+}
+
+###
+GET http://localhost:3000/api/auth/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4NDMzNzkxMSwiZXhwIjoxNzg0MzM3OTcxfQ.kc5EU6ju45PScoQsJmIivDNZugIVl80M6UQnS-_AbG4
+
+###
+POST http://localhost:3000/api/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4NDMzODU5MCwiZXhwIjoxNzg0OTQzMzkwfQ.3ecm3zUd-muYU_5YeRAlNFbisjn8XI6s1lCUWlhVQIg"
+}
+
+###
+POST http://localhost:3000/api/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4NDMzODU5MCwiZXhwIjoxNzg0OTQzMzkwfQ.3ecm3zUd-muYU_5YeRAlNFbisjn8XI6s1lCUWlhVQIg"
+}
+
