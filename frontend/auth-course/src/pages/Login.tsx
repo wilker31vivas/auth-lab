@@ -1,25 +1,16 @@
 import { useState } from 'react'
-import { useAuth } from './AuthContext'
-import { useLocation, Navigate } from "react-router-dom";
+import { useAuth } from '../context/AuthContext'
 
 function Login() {
-    const { login, user } = useAuth();
-    const location = useLocation();
+    const { login, loginError, sucess } = useAuth();
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState<undefined | string>(undefined)
-    const [sucess, setSucess] = useState<undefined | string>(undefined)
-
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         login(email, password)
-    }
-
-    if (location.pathname === "/login" && user !== null) {
-        return <Navigate to='/dashboard' replace />
     }
 
     return (
@@ -33,8 +24,8 @@ function Login() {
             <input type="password" required name="" id="" placeholder='Contraseña aqui...' onChange={(e) => setPassword(e.target.value)} />
 
             <div>
-                {error && <p style={{ 'color': 'red' }}>{error}</p>}
-                {sucess && <p style={{ 'color': 'green' }}>{sucess}</p>}
+                {loginError && <p style={{ 'color': 'red' }}>{loginError}</p>}
+                {sucess && <p style={{ 'color': 'green' }}>{sucess.login}</p>}
             </div>
 
             <button type='submit'>Enviar</button>

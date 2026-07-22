@@ -1,10 +1,10 @@
 import './App.css'
-import Login from './Login'
-import Register from './Register'
-import Dashboard from './Dashboard'
-import ProtectedRoute from './ProtectedRoute'
+import Login from './pages/Login.tsx'
+import Register from './pages/Register.tsx'
+import Dashboard from './pages/Dashboard.tsx'
+import ProtectedRoute from './components/ProtectedRoute.tsx'
 import { Route, Routes } from 'react-router-dom'
-import { AuthProvider } from './AuthContext.tsx'
+import { AuthProvider } from './context/AuthContext.tsx'
 
 function App() {
   return (
@@ -12,7 +12,12 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/register' element={<Register />}></Route>
-        <Route path='/dashboard' element={<ProtectedRoute><Dashboard></Dashboard></ProtectedRoute>}></Route>
+        <Route path='/dashboard' element={
+          <ProtectedRoute>
+            <Dashboard></Dashboard>
+          </ProtectedRoute>
+        }>
+        </Route>
       </Routes>
     </AuthProvider>
   )
