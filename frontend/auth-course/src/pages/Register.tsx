@@ -8,10 +8,10 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [passwordError, setPasowordError] = useState<null | string>(null)
 
-    const { register, registerError, sucess } = useAuth()
+    const { register, registerError, sucessRegister } = useAuth()
 
     useEffect(() => {
-        if (password !== confirmPassword) {
+        if (password.length > 0 && confirmPassword.length > 0 && password !== confirmPassword) {
             setPasowordError('Contraseña no coinciden')
         } else {
             setPasowordError(null)
@@ -45,7 +45,7 @@ function Register() {
             <div>
                 {passwordError && <p style={{ 'color': 'red' }}>{passwordError}</p>}
                 {registerError && <p style={{ 'color': 'red' }}>{registerError}</p>}
-                {sucess && <p style={{ 'color': 'green' }}>{sucess.register}</p>}
+                {sucessRegister && <p style={{ 'color': 'green' }}>{sucessRegister}</p>}
             </div>
 
             <button type='submit'>Enviar</button>

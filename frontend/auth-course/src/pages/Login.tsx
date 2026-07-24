@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 
 function Login() {
-    const { login, loginError, sucess } = useAuth();
+    const { login, loginError } = useAuth();
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -25,7 +25,6 @@ function Login() {
 
             <div>
                 {loginError && <p style={{ 'color': 'red' }}>{loginError}</p>}
-                {sucess && <p style={{ 'color': 'green' }}>{sucess.login}</p>}
             </div>
 
             <button type='submit'>Enviar</button>

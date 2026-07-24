@@ -1,4 +1,4 @@
-POST http://localhost:3000/api/auth/register
+POST http://localhost:4001/api/auth/register
 Content-Type: application/json
 
 {
@@ -8,19 +8,19 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/api/welcome
+GET http://localhost:4001/api/welcome
 
 ###
-POST http://localhost:3000/api/auth/login
+POST http://localhost:4001/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@ejemplo.com",
+  "email": "wilder@gmail.com",
   "password": "MiPassword123!"
 }
 
 ###
-GET http://localhost:3000/api/auth/profile
+GET http://localhost:4001/api/auth/profile
 
 ###
-POST http://localhost:3000/api/auth/logout
+POST http://localhost:4001/api/auth/logout

@@ -5,16 +5,25 @@ import Dashboard from './pages/Dashboard.tsx'
 import ProtectedRoute from './components/ProtectedRoute.tsx'
 import { Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext.tsx'
+import PublicRoute from './components/PublicRoute.tsx'
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
-        <Route path='/login' element={<Login />}></Route>
-        <Route path='/register' element={<Register />}></Route>
+        <Route path='/login' element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }></Route>
+        <Route path='/register' element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }></Route>
         <Route path='/dashboard' element={
           <ProtectedRoute>
-            <Dashboard></Dashboard>
+            <Dashboard />
           </ProtectedRoute>
         }>
         </Route>

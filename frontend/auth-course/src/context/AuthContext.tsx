@@ -9,11 +9,10 @@ interface AuthContextType {
     loginError: string | null;
     profileError: string | null;
     registerError: string | null;
-    sucess: Sucess
+    sucessRegister: string | null
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
-type Sucess = { register: null | string, login: null | string }
 
 interface AuthProviderProps {
     children: ReactNode;
@@ -27,10 +26,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [profileError, setProfileError] = useState<string | null>(null);
     const [loginError, setLoginError] = useState<string | null>(null);
     const [registerError, setRegisterError] = useState<string | null>(null);
-    const [sucess, setSucess] = useState<Sucess>({
-        register: null,
-        login: null
-    })
+    const [sucessRegister, setSucessRegister] = useState<string | null>(null)
 
     useEffect(() => {
         setLoading(true);
@@ -103,31 +99,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }).then(data => {
             if (data.error) {
                 setRegisterError(data.error)
-                setSucess({
-                    register: null,
-                    login: null
-                })
+                setSucessRegister(null)
                 return;
             }
 
-            setSucess({
-                register: 'Cuenta registrada correctamente!',
-                login: null
-            })
+            setSucessRegister('Cuenta registrada correctamente!',)
             setRegisterError(null)
             setTimeout(() => {
                 login(email, password)
-                setSucess({
-                    register: null,
-                    login: null
-                })
+                setSucessRegister(null)
             }, 2000)
         }).catch(error => {
             console.log("Hubo un problema con la petición Fetch:" + error.message);
+            setRegisterError(error.message)
         });
     }
 
-    const value: AuthContextType = { user, login, register, logout, loading, loginError, registerError, profileError, sucess };
+    const value: AuthContextType = { user, login, register, logout, loading, loginError, registerError, profileError, sucessRegister };
 
     return (
         <AuthContext.Provider value={value}>
