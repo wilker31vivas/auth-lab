@@ -28,79 +28,82 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [registerError, setRegisterError] = useState<string | null>(null);
     const [sucessRegister, setSucessRegister] = useState<string | null>(null)
 
+    const profile = async () => {
+        try {
+            const response = await fetch('http://localhost:4001/api/auth/profile', {
+                credentials: "include",
+            })
+
+            const data = await response.json()
+
+            if (response.status === 401) {
+                setUser(null);
+                return;
+            }
+
+            if (!response.ok) {
+                setProfileError(data.error)
+                return;
+            }
+
+            setUser(data)
+        } catch (error: any) {
+            console.error("Fetch operation failed:", error.message);
+            setProfileError(error.message)
+        } finally {
+            setLoading(false)
+
+        }
+    }
+
     useEffect(() => {
         setLoading(true);
         setProfileError(null);
 
-        fetch('http://localhost:4001/api/auth/profile', {
-            credentials: "include",
-        }).then(response => {
-            if (response.status === 401) {
-                setUser(null);
-                return null;
-            }
-            if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
-            }
-            return response.json();
-        }).then(data => {
-            if (data) {
-                if (data.error) {
-                    setProfileError(data.error)
-                    return;
-                }
-                setUser(data)
-            }
-            return
-        }).catch(error => {
-            console.error("Fetch operation failed:", error.message);
-            setProfileError(error.message)
-        }).finally(() => {
-            setLoading(false)
-        })
+        profile()
     }, [])
 
-    const login = (email: string, password: string) => {
-        fetch("http://localhost:4001/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ email, password })
-        }).then((response) => {
+    //Cambiar la funcion .then() a async//await
+    const login = async (email: string, password: string) => {
+        try {
+            const response = await fetch("http://localhost:4001/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ email, password })
+            })
+
+            const data = await response.json()
+
             if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
-            }
-            return response.json();
-        }).then(data => {
-            if (data.error) {
                 setLoginError(data.error)
                 return;
             }
+
             setLoginError(null)
             setUser(data)
-        }).catch(error => {
-            console.log("Hubo un problema con la petición Fetch:" + error.message);
-            setLoginError(error.message)
-        });
+        } catch (error) {
+            setLoginError("No se pudo conectar con el servidor")
+        }
     }
+
     const logout = () => setUser(null);
 
-    const register = (name: string, email: string, password: string) => {
-        fetch("http://localhost:4001/api/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ name, email, password })
-        }).then((response) => {
+    //Cambiar la funcion .then() a async//await
+    const register = async (name: string, email: string, password: string) => {
+        try {
+            const response = await fetch("http://localhost:4001/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ name, email, password })
+            })
+
+            const data = await response.json()
             if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
-            }
-            return response.json();
-        }).then(data => {
-            if (data.error) {
                 setRegisterError(data.error)
                 setSucessRegister(null)
-                return;
+                return
             }
 
             setSucessRegister('Cuenta registrada correctamente!',)
@@ -109,10 +112,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 login(email, password)
                 setSucessRegister(null)
             }, 2000)
-        }).catch(error => {
-            console.log("Hubo un problema con la petición Fetch:" + error.message);
-            setRegisterError(error.message)
-        });
+        } catch (error) {
+            setRegisterError("No se pudo conectar con el servidor")
+        }
     }
 
     const value: AuthContextType = { user, login, register, logout, loading, loginError, registerError, profileError, sucessRegister };
