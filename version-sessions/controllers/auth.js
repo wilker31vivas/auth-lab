@@ -119,7 +119,7 @@ export class AuthController {
     }
   }
 
-  static async logout(req, res) {
+  static logout(req, res) {
     req.session.destroy((err) => {
       if (err) {
         console.error("Error en logout:", err.message);

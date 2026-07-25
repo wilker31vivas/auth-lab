@@ -59,11 +59,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     useEffect(() => {
         setLoading(true);
         setProfileError(null);
-
         profile()
     }, [])
 
-    //Cambiar la funcion .then() a async//await
     const login = async (email: string, password: string) => {
         try {
             const response = await fetch("http://localhost:4001/api/auth/login", {
@@ -87,9 +85,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
-    const logout = () => setUser(null);
+    const logout = async () => {
+        try {
+            const response = await fetch("http://localhost:4001/api/auth/logout", {
+                method: "POST",
+                credentials: "include"
+            })
 
-    //Cambiar la funcion .then() a async//await
+            setUser(null)
+        } catch (error: any) {
+            console.log(error.message)
+        }
+    }
+
     const register = async (name: string, email: string, password: string) => {
         try {
             const response = await fetch("http://localhost:4001/api/auth/register", {
