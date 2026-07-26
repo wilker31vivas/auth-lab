@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-interface AuthContextType {
+interface SessionsContextType {
     user: User | null;
     login: (email: string, password: string) => void;
     register: (name: string, email: string, password: string) => void;
@@ -12,15 +12,15 @@ interface AuthContextType {
     sucessRegister: string | null
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined)
+export const AuthContext = createContext<SessionsContextType | undefined>(undefined)
 
-interface AuthProviderProps {
+interface SessionsAuthProviderProps {
     children: ReactNode;
 }
 
 interface User { id: number; email: string; name: string }
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function SessionsAuthProvider({ children }: SessionsAuthProviderProps) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [profileError, setProfileError] = useState<string | null>(null);
@@ -125,7 +125,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
-    const value: AuthContextType = { user, login, register, logout, loading, loginError, registerError, profileError, sucessRegister };
+    const value: SessionsContextType = { user, login, register, logout, loading, loginError, registerError, profileError, sucessRegister };
 
     return (
         <AuthContext.Provider value={value}>
@@ -134,7 +134,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     );
 }
 
-export function useAuth(): AuthContextType {
+export function useSessionsAuth(): SessionsContextType {
     const context = useContext(AuthContext);
     if (!context) {
         throw new Error("useAuth debe usarse dentro de un AuthProvider ");

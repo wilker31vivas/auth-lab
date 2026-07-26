@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/SessionsAuthContext'
 
 function Register() {
     const [name, setName] = useState('')

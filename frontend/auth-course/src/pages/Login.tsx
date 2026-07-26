@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import { useAuth } from '../context/AuthContext'
 
-function Login() {
-    const { login, loginError } = useAuth();
+function LoginForm({ onSubmit, error }: { onSubmit: (email: string, password: string) => void, error: string | null }) {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -10,7 +8,7 @@ function Login() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        login(email, password)
+        onSubmit(email, password)
     }
 
     return (
@@ -24,7 +22,7 @@ function Login() {
             <input type="password" required name="" id="" placeholder='Contraseña aqui...' onChange={(e) => setPassword(e.target.value)} />
 
             <div>
-                {loginError && <p style={{ 'color': 'red' }}>{loginError}</p>}
+                {error && <p style={{ 'color': 'red' }}>{error}</p>}
             </div>
 
             <button type='submit'>Enviar</button>
@@ -32,4 +30,4 @@ function Login() {
     )
 }
 
-export default Login
+export default LoginForm
