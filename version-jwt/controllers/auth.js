@@ -3,8 +3,8 @@ import { connection } from "../database/db.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-
 const SALT_ROUNDS = 10;
+const REFRESH_TOKEN_MAX_AGE_MS = 604800000;
 
 export class AuthController {
   static async register(req, res) {
@@ -101,7 +101,14 @@ export class AuthController {
         .update(refreshToken)
         .digest("hex");
 
-      const expiresAt = new Date(Date.now() + 604800000);
+      const expiresAt = new Date(Date.now() + REFRESH_TOKEN_MAX_AGE_MS);
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+        maxAge: REFRESH_TOKEN_MAX_AGE_MS,
+      });
 
       await connection.query(
         "INSERT INTO refresh_tokens (userId, tokenHash, expiresAt) VALUES (?, ?, ?)",
@@ -112,7 +119,6 @@ export class AuthController {
         id: user.id,
         email: user.email,
         name: user.name,
-        refreshToken,
         accessToken,
       });
     } catch (error) {
@@ -148,30 +154,36 @@ export class AuthController {
   }
 
   static async logout(req, res) {
-    const { refreshToken } = req.body;
+    try {
+      const { refreshToken } = req.cookies;
 
-    if (!refreshToken) {
-      return res.status(401).json({ error: "Refresh token requerido" });
+      if (!refreshToken) {
+        return res.status(401).json({ error: "Refresh token requerido" });
+      }
+
+      const tokenHash = crypto
+        .createHash("sha256")
+        .update(refreshToken)
+        .digest("hex");
+
+      res.clearCookie("refreshToken");
+
+      await connection.query("DELETE FROM refresh_tokens WHERE tokenHash = ?", [
+        tokenHash,
+      ]);
+
+      return res.status(200).json({
+        message: "Logout exitoso",
+      });
+    } catch (error) {
+      console.error("Error en logout:", error.message);
+      return res.status(500).json({ error: "Error interno del servidor" });
     }
-
-    const tokenHash = crypto
-      .createHash("sha256")
-      .update(refreshToken)
-      .digest("hex");
-
-    await connection.query(
-      "DELETE FROM refresh_tokens WHERE tokenHash = ?",
-      [tokenHash],
-    );
-
-    return res.status(200).json({
-      message: "Logout exitoso",
-    });
   }
 
   static async refreshToken(req, res) {
     try {
-      const { refreshToken } = req.body;
+      const { refreshToken } = req.cookies;
 
       if (!refreshToken) {
         return res.status(401).json({ error: "Refresh token requerido" });
